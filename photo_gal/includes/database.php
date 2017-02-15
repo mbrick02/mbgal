@@ -44,13 +44,16 @@ class MySQLDatabase {
   }
 
   private function db_fail($type, $loca, $reas, $code) {
-  	$output = "Database $type";
-  	$output .= " failed for: <br />" .__FILE__;
-  	$output .= "<br /> in $loca method: <br /><br />";
-  	$output .=  "$reas<br />";
-  	$output .=  "$code<br />Error Code: <br />" . $this->pdo->errorCode();
-  	$output .= "<br />";
-  	die ($output);
+  	if (!($this->pdo->errorCode() === '00000')) {
+	  	$output = "Database $type";
+	  	$output .= " failed for: <br />" .__FILE__;
+	  	$output .= "<br /> in $loca method: <br /><br />";
+	  	$output .=  "$reas<br />";
+	  	$output .=  "$code - <br />Error Code: <br />" . $this->pdo->errorCode();
+	  	$output .=  "<br />Error Info: <br />";
+	  	$output .= "<pre>" . print_r($this->pdo->errorInfo(),1) . "</pre>";
+	  	die ($output);
+  	}
   }
   
   public function exec_qry($sql_to_prep, $array_qry_vals = "") {
@@ -61,16 +64,20 @@ class MySQLDatabase {
   		$this->lastQuery = $sql_to_prep;
   		// sth = statement handler
   		$sth = $this->pdo->prepare($sql_to_prep);
+
   		if (is_a($sth, "PDOStatement")){
   			// best pass ary params (not: $sth->bindParam(':var', $cals);)
-  			$result = $sth->execute($array_qry_vals);
+  			if (empty($array_qry_vals)) {
+ 				return $sth->execute();
+  			}
+  			$sth->execute($array_qry_vals);
+  			return $sth;
   		} else {
   			// statement failed
   			$reas = "Error with statement";
   			$code = $sql_to_prep;
   			$this->db_fail($type, $loca, $reas, $code);
   		}
-  		return $result;
   	} catch (PDOException $e) {
   		$reas = "PDOException";
   		$code = $sql_to_prep . "<br />" . $e->getMessage(). "<br />";
@@ -80,12 +87,15 @@ class MySQLDatabase {
   		$code = $sql_to_prep . "<br />" . $e->getMessage(). "<br />";
   		$this->db_fail($type, $loca, $reas, $code);
   	} finally {
-  		$reas = "try failed finally";
+  		/* success: 
+  		 * Error Code: 00000
+			Error Info: 	Array([0] => 00000...
+  		 */
+  		$reas = "try may have failed finally";
   		$code = $sql_to_prep;
   		$this->db_fail($type, $loca, $reas, $code);
-  	}
   		
-  	
+  	}
   }
   
   
