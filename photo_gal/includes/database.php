@@ -4,7 +4,7 @@
 require_once("config.php");  //*** need to establish above line
 class MySQLDatabase {
 
-  private $lastQuery = "no query yet";
+  private $lastQuery = "no query given at this point of program";
   private $dsn;
   private $opt;
   public $pdo;
@@ -56,6 +56,18 @@ class MySQLDatabase {
   	}
   }
   
+  // skoglund non-PDO db class has:
+  // fetch-, num-, (del or insert) affected-, -rows & insertid built into pdo
+  // 	as $sth->fetch, ->rowCount, ->lastInserId
+  /*
+   * For most databases,  PDOStatement::rowCount() 
+   * does not return the number of rows affected by a  SELECT statement. 
+   * Instead, use  PDO::query() to issue a SELECT COUNT(*) 
+   * statement with the same predicates as your intended SELECT statement, 
+   * then use  PDOStatement::fetchColumn() 
+   * to retrieve the number of rows that will be returned. 
+   */
+  
   public function exec_qry($sql_to_prep, $array_qry_vals = "") {
   	$type = "Query";
   	$loca = "exec_qry";
@@ -68,25 +80,26 @@ class MySQLDatabase {
   		if (is_a($sth, "PDOStatement")){
   			// best pass ary params (not: $sth->bindParam(':var', $cals);)
   			if (empty($array_qry_vals)) {
- 				return $sth->execute();
+ 				$sth->execute();
+ 				return $sth;  // success return statement handler
   			}
   			$sth->execute($array_qry_vals);
-  			return $sth;
-  		} else {
+  			return $sth; // success return statement handler
+  		} else {  // FAIL
   			// statement failed
   			$reas = "Error with statement";
   			$code = $sql_to_prep;
   			$this->db_fail($type, $loca, $reas, $code);
   		}
-  	} catch (PDOException $e) {
+  	} catch (PDOException $e) { // FAIL
   		$reas = "PDOException";
   		$code = $sql_to_prep . "<br />" . $e->getMessage(). "<br />";
   		$this->db_fail($type, $loca, $reas, $code);
   	}  catch (Exception $e) {
-  		$reas = "Gen. Exception";
+  		$reas = "Gen. Exception";  // FAIL
   		$code = $sql_to_prep . "<br />" . $e->getMessage(). "<br />";
   		$this->db_fail($type, $loca, $reas, $code);
-  	} finally {
+  	} finally { // FAIL (Unanticipated)
   		/* success: 
   		 * Error Code: 00000
 			Error Info: 	Array([0] => 00000...
@@ -97,8 +110,6 @@ class MySQLDatabase {
   		
   	}
   }
-  
-  
   		
   /*
   // This would not be db agnostic: public function mysqlPrep($string) {
