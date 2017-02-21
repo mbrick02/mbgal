@@ -13,7 +13,8 @@ function strip_zeros_from_date($marked_string="") {
 	$cleaned_string = str_replace('*', '', $no_zeros);
 	return $cleaned_string;
 }
-
+// define $message for other pages
+$message = "";
 function output_message($message="") {
 	if (!empty($message)) {
 		return "<p class=\"message\">{$message}</p>";

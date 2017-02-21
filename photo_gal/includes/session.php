@@ -47,7 +47,7 @@ class  Session {
 			$this->logged_in = false;
 		}
 	}
-	
-	
-}
+}   // END session class
+
+$session = new Session();
 ?>
