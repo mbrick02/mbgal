@@ -15,14 +15,37 @@ class User {
 	public static function find_by_id($id=0) {
 		global $db;
 		$sql_to_prep = "SELECT * FROM users WHERE id=:id";
-		$res_sth = $db->exec_qry($sql_to_prep, array(":id" => "{$id}"));
-		return $res_sth->fetch(PDO::FETCH_ASSOC);
+		$res_ary = self::find_by_sql($sql_to_prep, array(":id" => "{$id} LIMIT 1"));
+		
+		return !empty($res_ary) ? array_shift($res_ary) : false;
 	}
 	
 	// Skoglund has find_by_sql (self::find_by_sql in 'find' above) 
-	public static function find_by_sql($sql="") {
+	public static function find_by_sql($sql="", $field_val_ary="") {
 		global $db;
-		return $db->exec_qry($sql);  // statement handler
+		$sth = $db->exec_qry($sql, $field_val_ary);  // statement handler
+		$obj_array = array();
+		while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			$obj_array[] = self::instantiate($row);
+		}
+		return $obj_array;
+	}
+
+	public static function authenticate($username="", $password="") {
+		global $db;
+		// Skoglund uses escape_val(), but don't need to with DBO->exec
+		// $username = $db->escape_value($username);
+		// $username = $db->escape_value($username);
+		$hashed_password = password_hash($password); // , $defaultalgo
+		
+		$sql = "SELECT * FROM users ";
+		$sql .= "WHERE username = '{$username}' ";
+		$sql .= "AND password = '{$hashed_password}' ";
+		$sql .= "LIMIT 1";
+		
+		$res_ary = self::find_by_sql($sql);
+		
+		return !empty($res_ary) ? array_shift($res_ary) : false;
 	}
 	
 	public function fullNam(){
@@ -36,8 +59,8 @@ class User {
 	private static function instantiate($sth_rec) {
 		// ? Could check that $sth_rec exists and is array...?
 		// Simple, long-form approach:
-		/* $obj = new self;
-		$obj->id = 				$sth_rec['id'];
+		$obj = new self;
+		/* $obj->id = 				$sth_rec['id'];
 		$obj->username = 	$sth_rec['username'];
 		$obj->password = 	$sth_rec['password'];
 		$obj->first_name = $sth_rec['first_name'];
@@ -47,7 +70,7 @@ class User {
 		// More dynamic, short-form approach:
 		foreach ($sth_rec as $attribute=>$value){
 			if($obj->has_attribute($attribute)) {
-				$obj-$attribute = $value;
+				$obj->$attribute = $value;
 			}
 		}
 		
