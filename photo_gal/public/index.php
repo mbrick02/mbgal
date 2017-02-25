@@ -1,6 +1,5 @@
 <?php
-	require_once("../includes/database.php");
-	require_once("../includes/user.php");
+	require_once("../includes/initialize.php");
 	
 	if(isset($database)) { // if NOT do NOTHING (so NOT indenting)
 	// $sql_to_prep = "INSERT INTO users (id, username, password, first_name, last_name) ";
@@ -18,7 +17,7 @@
 	$i = 0;
 	foreach ($found_users as $a_user) {
 		++$i;
-		echo "user $i: ", $a_user->first_name, " ", $a_user->last_name, "<br />";
+		echo "user $i: ", $a_user->first_name, " ", $a_user->username, " pw: ", $a_user->password, "<br />";
 	}
 
 } else { echo "**No db!"; }  // isset DB else: END prog
