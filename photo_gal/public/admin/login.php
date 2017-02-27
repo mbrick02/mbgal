@@ -15,9 +15,11 @@
 		
 		if ($found_user) {
 			$session->login($found_user);
+			log_action("Login", "$username logged in.");
 			redirect_to("index.php");
 		} else {
 			// username/password combo was not found in the database
+			log_action("FailLin", "$username failed login attempt.");
 			$message = "Username/password combination incorrect.";
 		}
 	} else { // Form has not been submitted.
