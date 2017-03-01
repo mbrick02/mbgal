@@ -2,7 +2,9 @@
 	require_once("../../includes/initialize.php");
 	
 	if($session->is_logged_in()) {
-		redirect_to("index.php");
+		// redirect_to("index.php");
+		// reset for testing: 
+		$session->logout();
 	}
 	
 	// form's submit tag w/name="submit attribute!
@@ -19,7 +21,7 @@
 			redirect_to("index.php");
 		} else {
 			// username/password combo was not found in the database
-			log_action("FailLin", "$username failed login attempt.");
+			log_action("FailLgn", "$username failed login attempt.");
 			$message = "Username/password combination incorrect.";
 		}
 	} else { // Form has not been submitted.
