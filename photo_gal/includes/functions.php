@@ -36,32 +36,4 @@ function __autoload($class_name) {
 function include_layout_template($template="") {
 	include(SITE_ROOT.DS.'public'.DS.'layouts'.DS.$template);
 }
-
-function log_action($action, $message="") {
-	$file = SITE_ROOT.DS.'logs'.DS.'log.txt';
-	$dateStr = date('Y-m-d H:i:s'); // format year/m/d:HH:MM:SS
-	$separator = " ";
-	$actionPad = str_pad($action, 8, ".");
-	$content = $dateStr . $separator. "$actionPad: $message \n";
-	
-	if($handle = fopen($file, 'a')) { // append
-		fwrite($handle, $content); // returns number of bytes or false
-		fclose($handle);
-	} else {
-		echo "log_action for $file <br /> could not open log file for writing for: $message";
-	}
-}
-
-function clear_log($msg = "cleared") {
-	$file = SITE_ROOT.DS.'logs'.DS.'log.txt';
-	$dateStr = date('Y-m-d H:i:s'); // format year/m/d:HH:MM:SS
-
-	$content = "$dateStr   $msg\n";
-	
-	if($size = file_put_contents($file, $content)) {
-		// echo "A file of {$size} bytes was created.";
-	} else {
-		echo "log_action for $file <br /> could not open log file for writing for: $message";
-	}
-}
 ?>
