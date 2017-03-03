@@ -1,6 +1,1 @@
-2017-03-01 20:01:57 cleared.: cleared by mber01 
-
-2017-03-01 20:03:18 Login...: mber01 logged in. 
-
-2017-03-01 20:04:21 Login...: mber01 logged in. 
-
+2017-03-02 20:15:19 cleared.: mber01 cleared file

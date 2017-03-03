@@ -6,4 +6,8 @@
 <?php include_layout_template("admin_header.php") ?>
 
 			<h2>Menu</h2>
+			<Ul>
+				<li><a href="logfile.php">View Log file</a></li>
+				<li><a href="logout.php">logout</a></li>
+			</Ul>
 <?php include_layout_template("admin_footer.php") ?>

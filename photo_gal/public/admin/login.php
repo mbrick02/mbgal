@@ -2,9 +2,7 @@
 	require_once("../../includes/initialize.php");
 	
 	if($session->is_logged_in()) {
-		// redirect_to("index.php");
-		// reset for testing: 
-		$session->logout();
+		redirect_to("index.php");
 	}
 	
 	// form's submit tag w/name="submit attribute!
