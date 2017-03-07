@@ -76,8 +76,8 @@ class MySQLDatabase {
   		$this->lastQuery = $sql_to_prep;
   		// sth = statement handler
   		$sth = $this->pdo->prepare($sql_to_prep);
-
-  		if (is_a($sth, "PDOStatement")){
+  		
+		if (is_a($sth, "PDOStatement")){
   			// best pass ary params (not: $sth->bindParam(':var', $cals);)
   			if (empty($array_qry_vals)) {
  				$sth->execute();
@@ -95,20 +95,20 @@ class MySQLDatabase {
   		$reas = "PDOException";
   		$code = $sql_to_prep . "<br />" . $e->getMessage(). "<br />";
   		$this->db_fail($type, $loca, $reas, $code);
-  	}  catch (Exception $e) {
+  	} /* DEBUG CATCH FINALLY catch (Exception $e) {
   		$reas = "Gen. Exception";  // FAIL
   		$code = $sql_to_prep . "<br />" . $e->getMessage(). "<br />";
   		$this->db_fail($type, $loca, $reas, $code);
   	} finally { // FAIL (Unanticipated)
-  		/* success: 
-  		 * Error Code: 00000
-			Error Info: 	Array([0] => 00000...
-  		 */
+  		// success: 
+  		 // Error Code: 00000
+		//	Error Info: 	Array([0] => 00000...
+  		
   		$reas = "try may have failed finally";
   		$code = $sql_to_prep;
   		$this->db_fail($type, $loca, $reas, $code);
   		
-  	}
+  	}   *** END DEBUG CATCH FINALLYwithin exec_qry */
   }
   		
   /*
