@@ -126,17 +126,6 @@ class User extends DatabaseObject {
 		
 	}
 */ // comment out code for what was previous prototype for database_object
-
-	
-		 
-	public function update() {
-		 
-	}
-		 
-	public function delete() {
-		 
-	}
-
 		 
 } // ** END class User
 

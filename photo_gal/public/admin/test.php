@@ -5,7 +5,7 @@ require_once("../../includes/initialize.php");
 ?>
 <?php include_layout_template("admin_header.php") ?>
 <?php 
-	$user = new User;
+	/* $user = new User;
 	$user->username = "newMB";
 	$user->password = "newsecret1";
 //	$user->hashpw = "";
@@ -17,7 +17,9 @@ require_once("../../includes/initialize.php");
 		echo "success!<br/>";
 	} else {
 		echo "failed to create user";
-	}
+	} */
+
+
 ?>
 
 <?php include_layout_template("admin_footer.php") ?>
