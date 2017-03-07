@@ -6,6 +6,7 @@ class User extends DatabaseObject {
 	public $id;
 	public $username;
 	public $password;
+	public $hashpw;
 	public $first_name;
 	public $last_name;
 	
@@ -124,7 +125,19 @@ class User extends DatabaseObject {
 		return array_key_exists($attribute, $object_vars);
 		
 	}
-*/ // comment out code for what was previous prototype for database_object	
+*/ // comment out code for what was previous prototype for database_object
+
+	
+		 
+	public function update() {
+		 
+	}
+		 
+	public function delete() {
+		 
+	}
+
+		 
 } // ** END class User
 
 // User::set_tbName("users");  // not needed

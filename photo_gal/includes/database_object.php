@@ -63,6 +63,61 @@ class DatabaseObject {
 	 	return array_key_exists($attribute, $object_vars);
 
 	 }
-
+	 
+	 public function create($aryFlds="") {
+		 global $db;
+		 
+		 if (!is_array($aryFlds)){
+		 	$aryFlds = array('username', 'password', 'first_name', 'last_name');
+		 }
+		 
+	 	$strFlds = implode(", ", $aryFlds);
+	 	$aryParams = $aryFlds;
+	 	foreach ($aryParams as &$value) {
+	 		$value = ':'.$value;
+	 	}
+	 	unset($value);
+	 	$strParams = implode(", ", $aryParams);
+		
+		
+		 // INSERT INTO table (key, key) VALUES ('value', 'value') use PDO
+		 $sql = "INSERT INTO " . static::$tbName ." (";
+		 // $sql .= 'username', 'password', 'first_name', 'last_name';
+		 $sql .= $strFlds;
+		 $sql .= ") VALUES (";
+		 // $sql .= ":username, :password, :first_name, :last_name" . ")";
+		 $sql .= $strParams . ")";
+		 
+		 $fld_param_fld_ary = array_combine($aryParams, $aryFlds);
+		 $field_val_ary = array();
+		 foreach($fld_param_fld_ary as $key => $value) {
+		 	$field_val_ary[$key] = $this->{$value};
+		 }
+		 
+		 /* array(':username' => $this->username, 
+		 ':password' => $this->password,
+		 ':first_name' => $this->first_name, ':last_name' => $this->last_name); */
+		 // $field_val_ary = array(':username', ':password', 
+		 //        ':first_name', ':last_name'
+		  
+		 $sth = $db->exec_qry($sql, $field_val_ary);  // statement handler
+		 
+		 if ($sth) {
+		 	$this->id = $db->pdo->lastInsertId();
+		 	return true;
+		 } else {
+		 	return false;
+		 }
+		 
+	}  // end public create()
+	
+	/* to be added after test in user.php
+	public function update() {
+	 	 
+	}
+	 
+	public function delete() {
+	 	 
+	}*/
 } // ** END class database_object
 ?>
