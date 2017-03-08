@@ -9,6 +9,9 @@
 	$user = User::find_by_id(1);
 	if ($user) {
 		echo "user fullname: " . $user->fullNam() . "<hr />";
+		echo "<br/> <pre>";
+		print_r($user);
+		echo "</pre>";
 	} else {
 		echo "no user found. <br />";
 	}
@@ -17,7 +20,7 @@
 	$i = 0;
 	foreach ($found_users as $a_user) {
 		++$i;
-		echo "user $i: ", $a_user->first_name, " ", $a_user->username, " pw: ", $a_user->password, "<br />";
+		echo "user $i: ", $a_user->id, " ", $a_user->first_name, " ", $a_user->username, " pw: ", $a_user->password, "<br />";
 	}
 
 } else { echo "**No db!"; }  // isset DB else: END prog

@@ -11,15 +11,38 @@ require_once("../../includes/initialize.php");
 //	$user->hashpw = "";
 	$user->first_name = "Louie";
 	$user->last_name = "LaBreek";
-	// **3/6/17 DEBUG -- $user->create will NOT normally return a value (remove "$sth =" below) 
-	// 
+	
 	if ($user->create(array('username', 'password', 'first_name', 'last_name'))){
 		echo "success!<br/>";
 	} else {
 		echo "failed to create user";
-	} */
+	}  */
 
+	$user = User::find_by_id(5);
 
+	if (!empty($user)) {
+		// echo "User: " . $user->username;
+		echo "<br/> <pre>";
+		print_r($user);
+		echo "</pre>";
+	} else {
+		echo "No user found"; 
+	}
+	
+	$user->password = "UNOTROsecret";
+	
+	/*
+	echo "<pre>";
+	print_r($user->update());
+	echo "</pre>";
+	 */
+	// echo $user->update();
+
+	if ($user->save()) {
+		echo "user updated";
+	} else {
+		echo "NO update of user";
+	}
 ?>
 
 <?php include_layout_template("admin_footer.php") ?>

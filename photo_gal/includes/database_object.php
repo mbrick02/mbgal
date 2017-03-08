@@ -14,9 +14,9 @@ class DatabaseObject {
 
 	public static function find_by_id($id=0) {
 		global $db;
-		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE id=:id";
-		$res_ary = static::find_by_sql($sql_to_prep, array(":id" => "{$id} LIMIT 1"));
-
+		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE id=:id LIMIT 1";
+		$res_ary = static::find_by_sql($sql_to_prep, array(":id" => "{$id}"));
+		
 		return !empty($res_ary) ? array_shift($res_ary) : false;
 	}
 
@@ -25,13 +25,15 @@ class DatabaseObject {
 		global $db;
 		$sth = $db->exec_qry($sql, $field_val_ary);  // statement handler
 		$obj_array = array();
+	/* DEBUG  */	
 		while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			$obj_array[] = static::instantiate($row);
 		}
+	
 		return $obj_array;
 	}
 
-	 private static function instantiate($sth_rec) {
+	private static function instantiate($sth_rec) {
 	 	// ? Could check that $sth_rec exists and is array...?
 	 	
 	 	$class_name = get_called_class();
@@ -54,7 +56,7 @@ class DatabaseObject {
 	 	return $obj;
 	 }
 
-	 private function has_attribute($attribute) {
+	private function has_attribute($attribute) {
 	 	// get_object_vars returns an associative array with all attributes
 	 	// (incl. private ones!) as the keys and their current values as the value
 	 	$object_vars = get_object_vars($this);
@@ -63,8 +65,13 @@ class DatabaseObject {
 	 	return array_key_exists($attribute, $object_vars);
 
 	 }
+	
+	 public function save() {
+	 	// a new record won't have an id yet.
+	 	return isset($this->id) ? $this->update() : $this->create();
+	 }
 	 
-	 public function create($aryFlds="") {
+	public function create($aryFlds="") {
 		 global $db;
 		 
 		 if (!is_array($aryFlds)){
@@ -87,7 +94,7 @@ class DatabaseObject {
 		 // $sql .= 'username', 'password', 'first_name', 'last_name';
 		 $sql .= $strFlds;
 		 $sql .= ") VALUES (";
-		 // $sql .= ":username, :password, :first_name, :last_name" . ")";
+		 // $sql .= ":username, :password, :first_name, :last_name" . ")"; // NOTE: no 's
 		 $sql .= $strParams . ")";
 		   
 		 $field_val_ary = array();
@@ -111,7 +118,6 @@ class DatabaseObject {
 	
 	public function update($aryFlds="") {
 	 	 global $db;
-	 	 // UPDATE table SET key='value', key='value' WHERE condition (sing-quo vals)
 	 	 
 	 	 if (!is_array($aryFlds)){
 	 	 	$aryFlds = array('username', 'password', 'first_name', 'last_name');
@@ -131,18 +137,20 @@ class DatabaseObject {
 	 	 $field_val_ary = array();
 	 	 foreach($fld_param_fld_ary as $key => $value) {
 	 	 	// Examp.: $sql .= "username='" . $this->username . "', ";  ... ."'";
-	 	 	$sqlUpdates .=  "{$value}='" . $key . "', ";
+	 	 	$sqlUpdates .=  "{$value}=" . $key . ", ";
 	 	 	// set array of vals for :fields to be executed below
 	 	 	$field_val_ary[$key] = $this->{$value};
 	 	 }
 	 	 
 	 	 // delete last comma -- trim first trim() to get rid of last space or rtrim space too
-	 	 rtrim($sqlUpdates,', ');
+	 	 $sqlUpdates = rtrim($sqlUpdates,', ');
 	 	 
-	 	 // Examp: UPDATE table SET username='unameVal', ...WHERE id=1
+	 	 // UPDATE table SET key='value', key='value' WHERE condition (sing-quo vals)
+	 	 // Examp: UPDATE table SET username='unameVal', ... WHERE id=1
+	 	 // Examp: UPDATE table SET username=:param1, ... WHERE id=1 // NOTE: no 's
 	 	 $sql = "UPDATE " . static::$tbName ." SET ";
 	 	 $sql .= $sqlUpdates;
-	 	 $sql .= " WHERE id=" . $this->id;
+	 	 $sql .= " WHERE id=" . $this->id; // id from DB so should be safe from sql injection
 	 	 	
 	 	 /* examp array(':field1' => $this->field1,':field2' => $this->field2); */
 	 	 
@@ -151,9 +159,14 @@ class DatabaseObject {
 	 	 // $affected_rows = $stmt->rowCount(); (not $db->pdo) instead of mysqli affected_rows
 	 	 
 	 	 return ($sth->rowCount() == 1) ? true : false;
-	}
+	} // End public method update()
 	 
-	public function delete() {
+	public function delete($aryFlds="") {
+		global $db;
+		
+		$sql = "DELETE FROM " . static::$tbName;
+		$sql .= " WHERE id=" . $this->id;  // id from DB so should be safe from sql injection
+		$sql .= " LIMIT 1";
 	 	 
 	}
 } // ** END class database_object

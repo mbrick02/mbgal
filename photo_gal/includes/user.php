@@ -6,7 +6,7 @@ class User extends DatabaseObject {
 	public $id;
 	public $username;
 	public $password;
-	public $hashpw;
+	// public $hashpw;
 	public $first_name;
 	public $last_name;
 	
