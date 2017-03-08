@@ -18,7 +18,7 @@ require_once("../../includes/initialize.php");
 		echo "failed to create user";
 	}  */
 
-	$user = User::find_by_id(5);
+	/* $user = User::find_by_id(5);
 
 	if (!empty($user)) {
 		// echo "User: " . $user->username;
@@ -30,19 +30,23 @@ require_once("../../includes/initialize.php");
 	}
 	
 	$user->password = "UNOTROsecret";
-	
+	*/
 	/*
 	echo "<pre>";
 	print_r($user->update());
 	echo "</pre>";
 	 */
 	// echo $user->update();
-
+/*
 	if ($user->save()) {
 		echo "user updated";
 	} else {
 		echo "NO update of user";
-	}
+	} */
+	
+	$user = User::find_by_id(16);
+	$user->delete();
+
 ?>
 
 <?php include_layout_template("admin_footer.php") ?>

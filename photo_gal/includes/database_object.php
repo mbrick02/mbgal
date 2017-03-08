@@ -141,6 +141,7 @@ class DatabaseObject {
 	 	 	// set array of vals for :fields to be executed below
 	 	 	$field_val_ary[$key] = $this->{$value};
 	 	 }
+	 	 // examp $field_val_ary = array(':field1' => $this->field1,':field2' => $this->field2);
 	 	 
 	 	 // delete last comma -- trim first trim() to get rid of last space or rtrim space too
 	 	 $sqlUpdates = rtrim($sqlUpdates,', ');
@@ -151,23 +152,24 @@ class DatabaseObject {
 	 	 $sql = "UPDATE " . static::$tbName ." SET ";
 	 	 $sql .= $sqlUpdates;
 	 	 $sql .= " WHERE id=" . $this->id; // id from DB so should be safe from sql injection
-	 	 	
-	 	 /* examp array(':field1' => $this->field1,':field2' => $this->field2); */
 	 	 
 	 	 $sth = $db->exec_qry($sql, $field_val_ary);  // statement handler
 	 	 
 	 	 // $affected_rows = $stmt->rowCount(); (not $db->pdo) instead of mysqli affected_rows
-	 	 
 	 	 return ($sth->rowCount() == 1) ? true : false;
 	} // End public method update()
 	 
-	public function delete($aryFlds="") {
+	public function delete() {
 		global $db;
 		
 		$sql = "DELETE FROM " . static::$tbName;
 		$sql .= " WHERE id=" . $this->id;  // id from DB so should be safe from sql injection
 		$sql .= " LIMIT 1";
-	 	 
+	 	
+		$sth = $db->exec_qry($sql);  // statement handler
+		
+		// $affected_rows = $stmt->rowCount(); (not $db->pdo) instead of mysqli affected_rows
+		return ($sth->rowCount() == 1) ? true : false;
 	}
 } // ** END class database_object
 ?>
