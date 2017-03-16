@@ -3,6 +3,7 @@ require_once (LIB_PATH.DS.'database.php');
 
 class User extends DatabaseObject {
 	protected static $tbName="users";
+	protected static $db_fields = array('id', 'username', 'password', 'first_name', 'last_name');
 	public $id;
 	public $username;
 	public $password;

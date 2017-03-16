@@ -36,6 +36,7 @@ require_once(LIB_PATH.DS."database_object.php");
 
 // load database-related classes
 require_once(LIB_PATH.DS."user.php");
+require_once(LIB_PATH.DS."photograph.php");
 
 // load logger class
 require_once(LIB_PATH.DS."logger.php");

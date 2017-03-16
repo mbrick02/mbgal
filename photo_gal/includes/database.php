@@ -114,7 +114,7 @@ class MySQLDatabase {
   /*
   // This would not be db agnostic: public function mysqlPrep($string) {
   // this is a mysqli function to clean up string for sql query
-  // *** This should NOT be used with PDO prepare/execute & $this->connection WONT work
+  // *** This should NOT be needed or used with PDO prepare/execute & $this->connection WONT work
   public function escapeValue($string) {
   	$escaped_string = mysqli_real_escape_string($this->connection, $string);
   	return $escaped_string;
