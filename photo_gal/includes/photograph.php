@@ -61,7 +61,7 @@ class Photograph extends DatabaseObject {
 			if (!empty($this->errors)) { return false; }
 			
 			// Make sure the caption is not too long for the DB
-			if (strlen($this->caption) <= 255) {
+			if (strlen($this->caption) > 255) {
 				$this->errors[] = "The caption can only be 255 characters";
 				return false;
 			}
@@ -111,7 +111,7 @@ class Photograph extends DatabaseObject {
 			$sizeKB = round($this->size/1024);
 			return "{$sizeKB} KB";
 		} else {
-			$sizeMB = round($gthis->size/1048576, 1);
+			$sizeMB = round($this->size/1048576, 1);
 			return "{$sizeMB} MB";
 		}
 	}
