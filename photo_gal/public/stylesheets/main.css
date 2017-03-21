@@ -114,18 +114,20 @@ ul.pages{
 .view-content{
   margin:1em; padding: 1em; border:1px solid #999;
 }
-.message{
+.message, , body div#main p.message{
+  display: block;
   border: 2px solid #8D0D19;
   color: #8D0D19;
   font-weight: bold;
-  margin: 1em 0;
+  margin: 1em 5em 0 0;
   padding: 1em;
+  width: 70%;
 }
 
 /*errors*/
 .error{
   color: #8D0D19; border: 2px solid #8D0D19;
-  margin: 1em 0; padding: 1em;
+  margin: 1em 5em 0 0; padding: 1em;
 }
 .error ul{
   padding-left: 2em;

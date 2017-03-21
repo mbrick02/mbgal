@@ -39,7 +39,7 @@ class Photograph extends DatabaseObject {
 			return false;
 		} else {  // everything okay
 			// Set object attributes to the form parameters.
-			$this->tempPath = $file['tmp_name'];
+			$this->temp_path = $file['tmp_name'];
 			$this->filename = basename($file['name']);  // basename is filename at end of path
 			$this->type = $file['type'];
 			$this->size = $file['size'];
