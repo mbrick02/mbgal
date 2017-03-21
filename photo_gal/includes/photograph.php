@@ -2,7 +2,7 @@
 require_once (LIB_PATH.DS.'database.php');
 
 class Photograph extends DatabaseObject {
-	protected static $tbName="users";
+	protected static $tbName="photographs";
 	protected static $db_fields = array('id', 'filename', 'type', 'size', 'caption');
 	public $id;
 	public $filename;
