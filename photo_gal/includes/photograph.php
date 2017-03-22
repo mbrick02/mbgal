@@ -100,12 +100,12 @@ class Photograph extends DatabaseObject {
 		}
 	}
 	
-	public function imagePath() {
-		return $this->uploadDir.DS.$this->filename;
+	public function image_path() {
+		return $this->upload_dir.DS.$this->filename;
 	}
 	
-	public function sizeAsText() {
-		if ($this-> size < 1024) {
+	public function size_as_text() {
+		if ($this->size < 1024) {
 			return "{$this->size} bytes";
 		} elseif($this->size < 1048576) {
 			$sizeKB = round($this->size/1024);

@@ -6,7 +6,7 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 <?php 
 	$max_file_size = 10485760; // expressed in bytes 10 MB
 	
-	$message ="";
+	// no need for this since set in $session: $message ="";
 	if(isset($_POST['submit'])) {
 		$photo = new Photograph();
 		$photo->caption = $_POST['caption'];
@@ -14,7 +14,8 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 		$photo->attach_file($_FILES['file_upload']); // success tested in save() error
 		if ($photo->save()) {
 			// Success
-			$message = "Photograph uploaded successfully.";
+			$session->message("Photograph uploaded successfully.");
+			redirect_to('list_photos.php');
 		} else {
 			// Failure
 			$message = join("<br />", $photo->errors);
@@ -25,7 +26,7 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 	<h2>Photo Upload</h2>
 	<?php echo output_message($message); ?>
 	<form action="photo_upload.php" enctype="multipart/form-data" method="POST">
-		<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+		<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size; ?>" />
 		<p><input type="file" name="file_upload" /> </p>
 		<p>Caption: <input type="text" name="caption" value="" /></p>
 		<p><input type="submit" name="submit" value="Upload" /></p>
