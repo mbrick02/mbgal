@@ -15,6 +15,7 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 	<th>Type</th>
 	<th>Size</th>
 	<th>Caption</th>
+	<th>&nbsp;</th>
 </tr>
 
 <?php 
@@ -27,6 +28,7 @@ foreach ($photosAry as $photo) { // or use foreach($phs as $ph): format (no curl
 	echo "<td>". $photo->type . "</td>";
 	echo "<td>". $photo->size_as_text() . "</td>";
 	echo "<td>". $photo->caption . "</td>";
+	echo "<td><a href=\"delete_photo.php?id=" . $photo->id . "\">Delete</a></td>";
 	echo "</tr>";
 }
 ?>

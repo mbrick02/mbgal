@@ -26,6 +26,19 @@ class Photograph extends DatabaseObject {
 			UPLOAD_ERR_EXTENSION => "File upload stopped by extension."
 	);
 	
+	public function destroy() {
+		// First remove the database entry
+		if($this->delete()) {
+			// then remove the file
+			$taget_path = SITE_ROOT.DS.'public'.DS.$this->image_path();
+			return unlink($target_path) ? true : false;
+		} else {
+			// database delete failed
+			return false;
+		}
+		// then remove the file
+	}
+	
 	// Pass in $_FILE(['uploaded_file']) as an argument
 	public function attach_file($file) {
 		// Perform error checking on the form parameters

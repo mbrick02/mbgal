@@ -14,6 +14,7 @@ class DatabaseObject {
 
 	public static function find_by_id($id=0) {
 		global $db;
+		$id = is_numeric($id) ? $id : 0;  // make sure it is legit
 		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE id=:id LIMIT 1";
 		$res_ary = static::find_by_sql($sql_to_prep, array(":id" => "{$id}"));
 		
@@ -83,6 +84,7 @@ class DatabaseObject {
 	 	// a new record won't have an id yet.
 	 	return isset($this->id) ? $this->update() : $this->create();
 	 }
+	 
 	 
 	 /*
 	  *  not used since we use PDO -- which does not allow sql injection 
