@@ -6,7 +6,7 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 <?php // not needed, $message cleared in session; $message =""; ?>
 <?php include_layout_template("admin_header.php") ?>
 <h2>List of Photos</h2>
-<?php $photosAry = Photograph::find_all(); $ph?>
+<?php $photosAry = Photograph::find_all(); ?>
 <?php echo output_message($message); ?>
 <table class="bordered">
 <tr>

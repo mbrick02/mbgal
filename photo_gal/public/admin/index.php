@@ -7,6 +7,7 @@
 <?php echo output_message($message); ?>
 			<h2>Menu</h2>
 			<Ul>
+				<li><a href="list_photos.php">List Photos</a></li>
 				<li><a href="logfile.php">View Log file</a></li>
 				<li><a href="logout.php">logout</a></li>
 			</Ul>

@@ -30,13 +30,13 @@ class Photograph extends DatabaseObject {
 		// First remove the database entry
 		if($this->delete()) {
 			// then remove the file
-			$taget_path = SITE_ROOT.DS.'public'.DS.$this->image_path();
+			$target_path = SITE_ROOT.DS.'public'.DS.$this->image_path();
+			
 			return unlink($target_path) ? true : false;
 		} else {
 			// database delete failed
 			return false;
 		}
-		// then remove the file
 	}
 	
 	// Pass in $_FILE(['uploaded_file']) as an argument

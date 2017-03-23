@@ -1,5 +1,7 @@
 <?php
 	require_once("../includes/initialize.php");
+
+	include_layout_template("header.php");
 	
 	if(isset($database)) { // if NOT do NOTHING (so NOT indenting)
 	// $sql_to_prep = "INSERT INTO users (id, username, password, first_name, last_name) ";
@@ -26,4 +28,23 @@
 } else { echo "**No db!"; }  // isset DB else: END prog
 
 ?>
+
+<?php echo "<br />" . output_message($message); ?>
+<h2>Photos</h2>
+<?php $photosAry = Photograph::find_all(); ?>
+
+
+<?php 
+// $target_path = SITE_ROOT .DS. 'public' .DS. $this->upload_dir .DS. $this->filename;
+foreach ($photosAry as $photo) { // or use foreach($phs as $ph): format (no curlies)
+	echo "<div style=\"float: left; margin-left: 20px;\">";
+	echo "<a href=\"photo.php?id={$photo->id}\">";
+	echo "<img src=\"". $photo->image_path() . "\" alt=\"" . $photo->caption . "\" ";
+	echo "width=\"200\" /></a>";
+	echo "<p>". $photo->caption . "</p>";
+	echo "</div>";
+}
+?>
+<?php include_layout_template("footer.php") ?>
+
 
