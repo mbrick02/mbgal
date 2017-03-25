@@ -1,4 +1,5 @@
 <?php
+// ******DELETE THIS FILE Note: we copied all this into index.php
 require_once("../includes/initialize.php");
 ?>
 <?php // not needed, $message cleared in session; $message =""; ?>

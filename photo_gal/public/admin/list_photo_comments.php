@@ -1,3 +1,5 @@
+// **** FROM photo.php  BELOW IS code from list_photos
+// need to get the photo id to show the image and find all the comments 
 <?php
 require_once("../includes/initialize.php");
 require_once(LIB_PATH.DS."comment.php");
@@ -61,25 +63,45 @@ $comments = $photo->comments();
 	<?php if(empty($comments)) { echo "No Comments."; } ?>
 </div>
 
-<div id="comment-form">
-	<h3>New Comment</h3>
-	<?php echo output_message($message); ?>
-	<form action="photo.php?id=<?php echo $photo->id; ?>" method="post">
-		<table>
-			<tr>
-				<td>Your name:</td>
-				<td><input type="text" name="author" value="<?php echo $author; ?>"></td>
-			</tr>
-			<tr>
-				<td>Your comment:</td>
-				<td><textarea name="body" cols="40" rows="8"><?php echo $body; ?></textarea></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td><input type="submit" name="submit" value="Submit Comment"></td>
-			</tr>
-		</table>
-	</form>
-</div>
 
 <?php include_layout_template("footer.php") ?>
+
+// ****FROM list_photos.... ***************************************************************
+<?php
+require_once("../../includes/initialize.php");
+
+if(!$session->is_logged_in()) { redirect_to("login.php"); }
+?>
+<?php // not needed, $message cleared in session; $message =""; ?>
+<?php include_layout_template("admin_header.php") ?>
+<h2>List of Photos</h2>
+<?php $photosAry = Photograph::find_all(); ?>
+<?php echo output_message($message); ?>
+<table class="bordered">
+<tr>
+	<th>Author</th>
+	<th>Comment</th>
+	<th>Date</th>
+	<th>&nbsp;</th>
+</tr>
+
+<?php 
+// $target_path = SITE_ROOT .DS. 'public' .DS. $this->upload_dir .DS. $this->filename;
+foreach ($comments as $comment) { // or use foreach($phs as $ph): format (no curlies)
+	echo "<tr>";
+	echo "<td><img src=\"../". $photo->image_path() . "\" alt=\"" . $photo->caption . "\" ";
+	echo "width=\"100\" /></td>";
+	echo "<td>". $comment->author . "</td>";
+	echo "<td>". $comment->body . "</td>";
+	echo "<td>". $comment->date . "</td>";
+	echo "<td><a href=\"delete_comment.php?id=" . $photo->id . "\">Delete</a></td>";
+	echo "</tr>";
+}
+?>
+</table>
+<br>
+<a href="photo_upload.php">Upload a new photo</a>
+
+<?php include_layout_template("admin_footer.php") ?>
+
+?>

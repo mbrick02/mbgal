@@ -130,7 +130,7 @@ class Photograph extends DatabaseObject {
 	}
 	
 	public function comments() {
-		return Comment::findCommentsOn($this->id);
+		return Comment::find_comments_on($this->id);
 	}
 }
 ?>
