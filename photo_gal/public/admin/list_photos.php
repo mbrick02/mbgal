@@ -29,7 +29,8 @@ foreach ($photosAry as $photo) { // or use foreach($phs as $ph): format (no curl
 	echo "<td>". $photo->type . "</td>";
 	echo "<td>". $photo->size_as_text() . "</td>";
 	echo "<td>". $photo->caption . "</td>";
-	echo "<td><a href=\"list_photo_comments.php?id=" . $photo->id . "\">Edit? Comments</a></td>";
+	echo "<td><a href=\"list_photo_comments.php?id=" . $photo->id . "\">";
+	echo count($photo->comments()) . " Comments</a></td>";
 	echo "<td><a href=\"delete_photo.php?id=" . $photo->id . "\">Delete</a></td>";
 	echo "</tr>";
 }
