@@ -26,7 +26,7 @@ class DatabaseObject {
 		global $db;
 		$sth = $db->exec_qry($sql, $field_val_ary);  // statement handler
 		$obj_array = array();
-	/* DEBUG  */	
+
 		while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			$obj_array[] = static::instantiate($row);
 		}
@@ -34,6 +34,14 @@ class DatabaseObject {
 		return $obj_array;
 	}
 
+	public static function count_all() {
+		global $db;
+		$sql = "SELECT COUNT(*) FROM ".static::$tbName;
+		$sth = $db->exec_qry($sql);
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		return array_shift($row);
+	}
+	
 	private static function instantiate($sth_rec) {
 	 	// ? Could check that $sth_rec exists and is array...?
 	 	
