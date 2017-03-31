@@ -21,6 +21,9 @@ if(isset($_POST['submit'])) {
 	if($new_comment && $new_comment->save()) {
 		// was saved -- no $message nessary, because comment will now show
 		
+		// Send email
+		$new_comment->try_send_notification();
+		
 		// Don't render (or could resubmit same values) instead...
 		redirect_to("photo.php?id={$photo->id}");
 	} else {
@@ -46,7 +49,7 @@ $comments = $photo->comments();
 
 <div id="comments">
 	<?php foreach($comments as $comment): ?>
-		<div class="comment" style="margin-bottom: 2em";>
+		<div class="comment" style="margin-bottom: 2em;">
 			<div class="author">
 				<?php echo htmlentities($comment->author); ?> wrote:
 			</div>

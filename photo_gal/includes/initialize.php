@@ -35,6 +35,7 @@ require_once(LIB_PATH.DS."database.php");
 require_once(LIB_PATH.DS."database_object.php");
 require_once(LIB_PATH.DS."database_object.php");
 require_once(LIB_PATH.DS."pagination.php");
+require_once(LIB_PATH.DS."phpmailer".DS."PHPMailerAutoload.php");
 
 // load database-related classes
 require_once(LIB_PATH.DS."user.php");

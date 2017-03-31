@@ -1,0 +1,26 @@
+
+module my-httpd 1.0;
+
+require {
+	type httpd_t;
+	type user_home_t;
+	type httpd_sys_content_t;
+	class process execmem;
+	class dir { read write };
+	class file read;
+}
+
+#============= httpd_t ==============
+
+#!!!! The file '/var/www/html/sandbox/GitPhoGal11/mbgal/photo_gal/public/images' is mislabeled on your system.  
+#!!!! Fix with $ restorecon -R -v /var/www/html/sandbox/GitPhoGal11/mbgal/photo_gal/public/images
+allow httpd_t httpd_sys_content_t:dir write;
+allow httpd_t self:process execmem;
+
+#!!!! The file '/var/www/html/sandbox/GitPhoGal11/mbgal/photo_gal/includes/phpmailer' is mislabeled on your system.  
+#!!!! Fix with $ restorecon -R -v /var/www/html/sandbox/GitPhoGal11/mbgal/photo_gal/includes/phpmailer
+allow httpd_t user_home_t:dir read;
+
+#!!!! The file '/var/www/html/sandbox/GitPhoGal11/mbgal/photo_gal/includes/phpmailer/class.phpmailer.php' is mislabeled on your system.  
+#!!!! Fix with $ restorecon -R -v /var/www/html/sandbox/GitPhoGal11/mbgal/photo_gal/includes/phpmailer/class.phpmailer.php
+allow httpd_t user_home_t:file read;
