@@ -36,7 +36,7 @@
 <?php // **** DELETE ABOVE AFTER WE IMPLEMENT HASH PW **** 
 	include_layout_template("header.php");
 ?>
-<?php echo $upperPage; // *** remove this with above ?>
+<?php echo $upperPage; // *** remove this when you remove sect. above ?>
 <?php echo "<br />" . output_message($message); ?>
 <h2>Photos</h2>
 <?php 
