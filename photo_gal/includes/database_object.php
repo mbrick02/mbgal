@@ -117,7 +117,7 @@ class DatabaseObject {
 		 if (!is_array($aryFlds)){
 		 	$aryFlds = $attributes;  // put all attributes array of fields
 		 }
-		 $aryFlds = array_filter($aryFlds);  // take out empty $key/$vals
+		 $aryFlds = array_filter($aryFlds);  // take out empty $key/$vals (prob. id)
 		
 		$aryFldKeys = array_keys($aryFlds);
 	 	$strFlds = implode(", ", $aryFldKeys);  // implode() = join() //'username', 'password', 'first...

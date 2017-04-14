@@ -1,5 +1,6 @@
 <?php
 require_once("../../includes/initialize.php");
+require_once(LIB_PATH.DS."comment.php");
 
 if(!$session->is_logged_in()) { redirect_to("login.php"); }
 ?>
