@@ -2,7 +2,8 @@
 require_once("../../includes/initialize.php");
 // require_once(LIB_PATH.DS."comment.php");
 
-// mber01 pw: secretpw1
+// linux: mber01 secretpw1
+// win: mber01	secretpw2
 if(!$session->is_logged_in()) { redirect_to("login.php"); }
 $upperPage = ""; // *** DELETE this with below AND echo line in page
 

@@ -7,6 +7,22 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 	$max_file_size = 10485760; // expressed in bytes 10 MB
 	
 	// no need for this since set in $session: $message ="";
+	// oneValidWord =
+	/*
+	 * // note: might want to replace 5 with $minNumChars .. ?
+	 if(preg_match('/^\w{5,}$/', $username)) { // \w equals "[0-9A-Za-z_]"
+    // valid username, alphanumeric & longer than or equals 5 chars
+		}
+		
+		// OR
+		if(preg_match('/^[a-zA-Z0-9]{5,}$/', $username)) { // for english chars + numbers only
+    // valid username, alphanumeric & longer than or equals 5 chars
+     // OR
+     preg_match("/[^a-zA-Z0-9\p{P}]/", "", $str);  
+     // \p{P}
+     // \s=char, space or new line--not needed
+}
+	 */
 	if(isset($_POST['submit'])) {
 		$user = new User();
 		$user->username = oneValidWordNOTWRITTENYET($_POST['username']);
