@@ -1,4 +1,5 @@
 <?php
+// Class for photo comments specifically
 // needs database.php
 require_once (LIB_PATH.DS.'database.php');
 

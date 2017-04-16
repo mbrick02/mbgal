@@ -1,7 +1,7 @@
 <?php
 	require_once("../includes/initialize.php");
 ?>
-<?php // **** DELETE ABOVE AFTER WE IMPLEMENT HASH PW **** 
+<?php 
 	include_layout_template("header.php");
 ?>
 <?php echo "<br />" . output_message($message); ?>
