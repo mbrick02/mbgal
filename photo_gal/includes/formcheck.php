@@ -4,9 +4,6 @@
 require_once (LIB_PATH.DS.'database.php');
 
 // **4/16/17 currently UNTESTED and UNUSED code originally plain functions NOT class
-// has alphaNum or punct: preg_match("/^[a-zA-Z0-9\p{P}]{5,}$/", "", $str);
-// \p{P}
-// \s=char, space or new line--not needed
 
 // **automate this as much as possible to deal with the form given  
 
@@ -52,8 +49,14 @@ class Formcheck { // ******extends DatabaseObject -- may not NEED to extend DB
 		return strpos($value, $char) === false;
 	}
 	
-	public static function accept_username($username) {
-		return preg_match("/^[a-zA-Z0-9\?\*\&\%\$]{5,}$/", $username) ? true : false;
+	public static function ok_uname($username, $min_length=3) {
+		
+		$regex = '/^[a-zA-Z0-9\?\*\&\%\$]{' . $min_length . ',}$/';
+		// "/^[a-zA-Z0-9\?\*\&\%\$]{5,}$/"
+		return preg_match($regex, $username) ? true : false;
+		// start alphaNum or certain punct -- 5 or less to end
+		// \p{P} -- chars of punctu. prop (but no * and allowed \)
+		// \s=char, space or new line--not needed
 	}
 	
 	public function form_errors() {
