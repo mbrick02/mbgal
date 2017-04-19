@@ -10,9 +10,35 @@ require_once (LIB_PATH.DS.'database.php');
 
 class Formcheck { // ******extends DatabaseObject -- may not NEED to extend DB
 	public $errors = array();
+	public $form_vals = array(); // assoc. array of (should be) text values.
+
 	
-	public static function has_presence($value) {
+	public function presence($value) {
 		return (isset($value) && $value !== "");
+	}
+	
+	public function proper_post($req_flds) {	
+		// idea of func based on: $username = isset($_POST['username']) ? $_POST['username'] : "";
+		// 	UPDATED so that now put values in Formcheck::from_vals
+		
+		// Validations		//$req_flds example: $required_fields = array("username", "password");
+		foreach ($req_flds as $field) {
+			if (isset($_POST[$field])){
+				$value = trim($_POST[$field]);
+				if (!$this->presence($value)) {
+					$this->errors[$field] = ucfirst($field) . " can't be blank";
+				} else {
+					$this->form_vals[$field] = $value; // note: use of ->$field so field name is used as attribute
+				}
+			} else {
+				$this->errors[$field] = ucfirst($field) . " not set as proper post";
+			}
+			
+		} // end foreach
+
+		/*  DEBUG uname & pw validation
+		**END DEBUG uname & pw validation */
+		
 	}
 	
 	public static function has_min_length($value, $min) {
@@ -24,11 +50,10 @@ class Formcheck { // ******extends DatabaseObject -- may not NEED to extend DB
 	}
 	
 	public static function validate_max_lengths($fields_with_max_lengths) {
-		
 		// Uses/requires an assoc. array
 		foreach($fields_with_max_lengths as $field => $max) {
 			$value = trim($_POST["$field"]);
-			if (!has_max_length($value, $max)) {
+			if (!self::has_max_length($value, $max)) {
 				$this->errors[$field] = ucfirst($field) . " is too long";
 			}
 		}
@@ -49,7 +74,7 @@ class Formcheck { // ******extends DatabaseObject -- may not NEED to extend DB
 		return strpos($value, $char) === false;
 	}
 	
-	public static function ok_uname($username, $min_length=3) {
+	public static function ok_tfld($username, $min_length=3) {
 		
 		$regex = '/^[a-zA-Z0-9\?\*\&\%\$]{' . $min_length . ',}$/';
 		// "/^[a-zA-Z0-9\?\*\&\%\$]{5,}$/"

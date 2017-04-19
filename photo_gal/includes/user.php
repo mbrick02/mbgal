@@ -3,11 +3,11 @@ require_once (LIB_PATH.DS.'database.php');
 
 class User extends DatabaseObject {
 	protected static $tbName="users";
-	protected static $db_fields = array('id', 'username', 'password', 'first_name', 'last_name');
+	protected static $db_fields = array('id', 'username', 'hashpw', 'first_name', 'last_name');  // password no longer used in db
 	public $id;
 	public $username;
-	public $password;
-	// public $hashpw;
+	// public $password;  // *** 4/18 No longer able to log in with old passwords ???? ******
+	public $hashpw;
 	public $first_name;
 	public $last_name;
 	
@@ -47,6 +47,17 @@ class User extends DatabaseObject {
 	function hash_pword($pword) {
 		 $hashedPword = password_hash(trim($pword), PASSWORD_BCRYPT, ['cost' => 10]);
 		 return $hashedPword;
+	}
+	
+	public function create($aryFlds="") {
+		$sql="SELECT * FROM ".static::$tbName . " WHERE username=:username";
+		if (usernameUnique-find_by_sql($sql, $field_val_ary="username-ish")) {
+			parent::create($aryFlds);
+		} else {
+			// username is not unique -- need to flag this
+			echo "username is not unique";
+			return false;
+		}
 	}
 	
 	/* old function version of "authenticate" above

@@ -6,25 +6,39 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 ?>
 <?php 
 if(isset($_POST['submit'])) {  // form was submitted
-		/*  DEBUG uname & pw validation
-		 
-			$username = isset($_POST['username']) ? $_POST['username'] : "";
-			$password = isset($_POST['password']) ? $_POST['password'] : "";
-
-			// Validations
-			$fields_required = array("username", "password");
-			foreach ($fields_required as $field) {
-				$value = trim($_POST[$field]);
-				if (!has_presence($value)) {
-					$errors[$field] = ucfirst($field) . " can't be blank";
-				}
-			}
-			**END DEBUG uname & pw validation */
+		
+	$formChk = new Formcheck();
 	// ** DEBUG current test (of uname via formcheck
 	$minUnameLgth = 5;
 	$gUName = "good username";
-	$bUName = "length, spaces or other unusable chars in username";
-	echo Formcheck::ok_uname(trim($_POST['username']), $minUnameLgth) ? $gUName: $bUName;
+	$bUName = "length, spaces or other unusable chars in username ({$minUnameLgth} character minimum)";
+	if ($formChk->ok_tfld(trim($_POST['username']), $minUnameLgth)){
+		//validate other values;
+		$username = htmlentities(trim($_POST['username'])); // populate with old val before error check
+		$password = htmlentities(trim($_POST['password']));
+		$first_name = htmlentities(trim($_POST['first_name']));
+		$last_name = htmlentities(trim($_POST['last_name']));
+		
+		$required_fields = array("username", "password", "first_name", "last_name");
+		$formChk->proper_post($required_fields);
+	} else {
+		$formChk->errors["username"] = $bUName;
+	}
+	if (!empty($formChk->errors)) {
+		echo $formChk->form_errors();
+	} else {
+		// no errors  -> User[$value] = formChk->vals[$*a_value]
+		// hashed password =  $user->hash_pword(formChk->vals[$password])
+		// ??? repopulate fields?????
+		$user = new User();
+		
+		$user->username = $formChk->form_vals['username'];
+		$user->first_name = $formChk->form_vals['first_name'];
+		$user->last_name = $formChk->form_vals['last_name'];
+		$user->hashpw = $user->hash_pword($formChk->form_vals[$password]);
+		
+		echo "full name of user: " . $user->fullNam() . "; hashed pw: " . $user->hashpw;
+	}
 	
 			/* **DEBUG other validation checks
 			// using assoc array with Validations
@@ -41,12 +55,7 @@ if(isset($_POST['submit'])) {  // form was submitted
 		
 
 		/*
-		$user = new User();
-		$user->username = oneValidWordNOTWRITTENYET($_POST['username']);
-		$user->first_name = oneValidWord($_POST['first_name']);
-		$user->last_name = oneValidWord($_POST['last_name']);
-		$user->hashed_password = hashed(oneValidWord($_POST['password']));
-			
+		
 		if ($user->save()) {
 			// Success
 			$session->message("user created successfully.");
@@ -56,18 +65,27 @@ if(isset($_POST['submit'])) {  // form was submitted
 			$message = join("<br />", $user->errors);
 		}
 		*/
+	} else { // Form has not been submitted.
+		$username = "";
+		$password = "";
+		$first_name = "";
+		$last_name = "";
 	}
+
 ?>
 <?php include_layout_template("admin_header.php") ?>
 	<h2>user Create</h2>
 	<?php echo output_message($message); ?>
+	<table>
 	<form action="create_user.php" enctype="multipart/form-data" method="POST">
-		<p>Username: <input type="text" name="username" value="" /></p>
-		<p>First name: <input type="text" name="first_name" value="" /></p>
-		<p>Last name: <input type="text" name="last_name" value="" /></p>
-		<p>Password: <input type="text" name="password" value="" /></p>
-		<p><input type="submit" name="submit" value="Create" /></p>
+		<tr><td align="right"><div style="float:right; text-align: right; width:100%;">Username:</div></td><td><input type="text" name="username" value="<?php echo htmlentities($username); ?>" /></td></tr>
+		
+		<tr><td align="right"><div style="float:right; text-align: right; width:100%;">First name:</div> </td><td><input type="text" name="first_name" value="<?php echo htmlentities($first_name); ?>" /></td></tr>
+		<tr><td align="right"><div style="float:right;text-align: right; width:100%;">Last name:</div> </td><td><input type="text" name="last_name" value="<?php echo htmlentities($last_name); ?>" /></td></tr>
+		<tr><td align="right"><div style="float:right;text-align: right; width:100%;">Password:</div></td><td><input type="text" name="password" value="<?php echo htmlentities($password); ?>" /></td></tr>
+		<tr><td colspan="2"><input type="submit" name="submit" value="Create" /></td></tr>
 	</form>
+	</table>
 <?php include_layout_template("admin_footer.php") ?>
 
 ?>
