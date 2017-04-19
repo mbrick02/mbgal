@@ -50,6 +50,15 @@ class User extends DatabaseObject {
 	}
 	
 	public function create($aryFlds="") {
+		/*
+		 from find_by_id($id=0) {
+		...
+		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE id=:id LIMIT 1";
+		$res_ary = static::find_by_sql($sql_to_prep, array(":id" => "{$id}"));
+		
+		* Instead of returning a result set/array
+		....
+		 */
 		$sql="SELECT * FROM ".static::$tbName . " WHERE username=:username";
 		if (usernameUnique-find_by_sql($sql, $field_val_ary="username-ish")) {
 			parent::create($aryFlds);
