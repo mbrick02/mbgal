@@ -112,6 +112,7 @@ class DatabaseObject {
 	 
 	public function create($aryFlds="") {  // $aryFlds is assoc. array $key => $val
 		 global $db;
+		 
 		 $attributes = $this->attributes(); // get all attributes for class/this object
 		 
 		 if (!is_array($aryFlds)){
@@ -128,19 +129,18 @@ class DatabaseObject {
 	 	unset($value);
 	 	$strParams = implode(", ", $aryParams);
 		
-		 // INSERT INTO table (key, key) VALUES ('value', 'value') use PDO
-		 $sql = "INSERT INTO " . static::$tbName ." (";
-		 $sql .= $strFlds; //'username', 'password', 'first...
-		 $sql .= ") VALUES (";
-		 $sql .= $strParams . ")"; // ":username, :password, :first..." . ")"; // NOTE: no 's
-		 
-		 
+		// INSERT INTO table (key, key) VALUES ('value', 'value') use PDO
+		$sql = "INSERT INTO " . static::$tbName ." (";
+		$sql .= $strFlds; //'username', 'password', 'first...
+		$sql .= ") VALUES (";
+		$sql .= $strParams . ")"; // ":username, :password, :first..." . ")"; // NOTE: no 's
+		
 	 	// combine so $fld_param_fld_ary[':fieldx'] = 'fieldx'
 	 	$fld_param_val = array_combine($aryParams, array_values($aryFlds));
-/*	(used when $aryFlds was not assoc array with vals)	 $field_val_ary = array();
-		 foreach($fld_param_val as $key => $value) {
-		 	$field_val_ary[$key] = $this->{$value};
-		 } */
+//	(used when $aryFlds was not assoc array with vals)	 $field_val_ary = array();
+	//	 foreach($fld_param_val as $key => $value) {
+	//	 	$field_val_ary[$key] = $this->{$value};
+	//	 } 
 		 // $field_param_val=array(':uname' => 'auname',...=array(':f1' => $this->f1,':f2...
 		  
 		 $sth = $db->exec_qry($sql, $fld_param_val);  // statement handler
@@ -150,8 +150,7 @@ class DatabaseObject {
 		 	return true;
 		 } else {
 		 	return false;
-		 }
-		 
+		 } 
 	}  // end public create()
 	
 	public function update($aryFlds="") {  // $aryFlds should be assoc. array $key => '$value'

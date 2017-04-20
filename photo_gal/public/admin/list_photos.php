@@ -7,6 +7,7 @@ if(!$session->is_logged_in()) { redirect_to("login.php"); }
 <?php // not needed, $message cleared in session; $message =""; ?>
 <?php include_layout_template("admin_header.php") ?>
 <h2>List of Photos</h2>
+<a href="index.php">&laquo; Back</a>
 <?php $photosAry = Photograph::find_all(); ?>
 <?php echo output_message($message); ?>
 <table class="bordered">
@@ -41,5 +42,3 @@ foreach ($photosAry as $photo) { // or use foreach($phs as $ph): format (no curl
 <a href="photo_upload.php">Upload a new photo</a>
 
 <?php include_layout_template("admin_footer.php") ?>
-
-?>

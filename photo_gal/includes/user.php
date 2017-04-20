@@ -3,10 +3,10 @@ require_once (LIB_PATH.DS.'database.php');
 
 class User extends DatabaseObject {
 	protected static $tbName="users";
-	protected static $db_fields = array('id', 'username', 'hashpw', 'first_name', 'last_name');  // password no longer used in db
+	protected static $db_fields = array('id', 'username', 'password', 'hashpw', 'first_name', 'last_name');  // password no longer used in db
 	public $id;
 	public $username;
-	// public $password;  // *** 4/18 No longer able to log in with old passwords ???? ******
+	public $password;  // *** 4/18 No longer allow log in with old passwords ???? ******
 	public $hashpw;
 	public $first_name;
 	public $last_name;
@@ -28,8 +28,8 @@ class User extends DatabaseObject {
 		$res_ary = self::find_by_sql($sql);
 		$user = !empty($res_ary) ? array_shift($res_ary) : false;
 		if ($user) {
-			// upgrade: if (!password_verify($password, $user['hashed_pw'])) {
-			if (!($user->password === $password)) {
+			// upgrade: if (!password_verify($password, $user['hashpw'])) {
+			if ((!($user->password === $password)) || (!password_verify($password, $user['hashpw']))){
 				$user = false;
 			}
 		}
@@ -49,22 +49,20 @@ class User extends DatabaseObject {
 		 return $hashedPword;
 	}
 	
-	public function create($aryFlds="") {
-		/*
-		 from find_by_id($id=0) {
-		...
-		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE id=:id LIMIT 1";
-		$res_ary = static::find_by_sql($sql_to_prep, array(":id" => "{$id}"));
-		
-		* Instead of returning a result set/array
-		....
-		 */
-		$sql="SELECT * FROM ".static::$tbName . " WHERE username=:username";
-		if (usernameUnique-find_by_sql($sql, $field_val_ary="username-ish")) {
-			parent::create($aryFlds);
+	public function uniqueUser(){
+		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE username=:username LIMIT 1";
+		$aryFlds = array(":username" => "{$this->username}");
+		if ($aryFlds[':username'] == "") { return false; } // no username given -- not unique enough
+		$res_obj_ary = static::find_by_sql($sql_to_prep, $aryFlds);
+		return ((empty($res_obj_ary)) || !(count($res_obj_ary) > 0));
+	}
+	
+	public function create($aryFlds = "") {
+		// ** for DEBUG could set $aryFlds[':username'] == "?whatever"
+		if ($this->uniqueUser()) {
+			return parent::create(); // assume 'aryFlds' will auto-gather attributes
 		} else {
 			// username is not unique -- need to flag this
-			echo "username is not unique";
 			return false;
 		}
 	}

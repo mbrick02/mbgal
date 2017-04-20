@@ -43,6 +43,7 @@ if(isset($database)) { // if NOT do NOTHING (so NOT indenting)
 <?php include_layout_template("admin_header.php") ?>
 <?php echo $upperPage; // *** remove this when you remove sect. above ?>
 <h2>List of Users</h2>
+<a href="index.php">&laquo; Back</a><br>
 <?php $usersAry = User::find_all(); ?>
 <?php echo output_message($message); ?>
 <table class="bordered">

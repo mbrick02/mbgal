@@ -66,8 +66,6 @@ class Formcheck { // ******extends DatabaseObject -- may not NEED to extend DB
 		return in_array($value, $set);
 	}
 	
-	// * Uniqueness (check DB)
-	
 	
 	// * Format in this case check for at sign by default
 	public static function has_char($value, $char="@") {
@@ -75,7 +73,6 @@ class Formcheck { // ******extends DatabaseObject -- may not NEED to extend DB
 	}
 	
 	public static function ok_tfld($username, $min_length=3) {
-		
 		$regex = '/^[a-zA-Z0-9\?\*\&\%\$]{' . $min_length . ',}$/';
 		// "/^[a-zA-Z0-9\?\*\&\%\$]{5,}$/"
 		return preg_match($regex, $username) ? true : false;
