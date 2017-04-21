@@ -28,8 +28,7 @@ class User extends DatabaseObject {
 		$res_ary = self::find_by_sql($sql);
 		$user = !empty($res_ary) ? array_shift($res_ary) : false;
 		if ($user) {
-			// upgrade: if (!password_verify($password, $user['hashpw'])) {
-			if ((!($user->password === $password)) || (!password_verify($password, $user['hashpw']))){
+			if ((!password_verify($password, $user->hashpw))){ // old non-encrypted password (!($user->password === $password)) && 
 				$user = false;
 			}
 		}
@@ -45,8 +44,10 @@ class User extends DatabaseObject {
 	}
 
 	function hash_pword($pword) {
-		 $hashedPword = password_hash(trim($pword), PASSWORD_BCRYPT, ['cost' => 10]);
-		 return $hashedPword;
+		$pword = trim($pword);
+		$hashedPword = password_hash($pword, PASSWORD_BCRYPT, ['cost' => 10]);
+		// ???*** $hashedPword = substr($pword, 0, 60);
+		return $hashedPword;
 	}
 	
 	public function uniqueUser(){
