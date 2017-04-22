@@ -3,7 +3,9 @@ require_once("../../includes/initialize.php");
 // require_once(LIB_PATH.DS."comment.php");
 
 // linux: mber01 secretpw1
+// ?linux w/hashedpw: frodojo hobbit#1
 // win: mber01	secretpw2
+// win w/hashedpw: newuser newuser1
 if(!$session->is_logged_in()) { redirect_to("login.php"); }
 $upperPage = ""; // *** DELETE this with below AND echo line in page
 
