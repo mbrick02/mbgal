@@ -4,6 +4,9 @@ require_once("../../includes/initialize.php");
 
 // linux: mber01 secretpw1
 // ?linux w/hashedpw: frodojo hobbit#1
+// ?linux w/hashedpw: BilboHob hobbit#1
+// ?linux w/hashedpw: DonQuixote Dulcinea#1
+// ?linux w/hashedpw: FarmBrown Real#Dirt
 // win: mber01	secretpw2
 // win w/hashedpw: newuser newuser1
 if(!$session->is_logged_in()) { redirect_to("login.php"); }
@@ -54,6 +57,7 @@ if(isset($database)) { // if NOT do NOTHING (so NOT indenting)
 	<th>fName</th>
 	<th>lName</th>
 	<th>pw</th>
+	<th>hash pw</th>
 	<th>&nbsp;</th>
 </tr>
 
@@ -65,6 +69,7 @@ foreach ($usersAry as $user) { // or use foreach($phs as $ph): format (no curlie
 	echo "<td>". $user->first_name . "</td>";
 	echo "<td>". $user->last_name. "</td>";
 	echo "<td>". $user->password. "</td>";
+	echo "<td>". $user->hashpw. "</td>";
 	echo "<td><a href=\"delete_user.php?id=" . $user->id;
 	echo "\" onclick=\"return confirm('Are you sure?');\">Delete</a></td>";
 	echo "</tr>";
