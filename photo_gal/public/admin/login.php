@@ -1,6 +1,6 @@
 <?php
 	require_once("../../includes/initialize.php");
-	
+	// linux user: gogolbordel	Gogol	Bordelo	gogbordel1
 	if($session->is_logged_in()) {
 		redirect_to("index.php");
 	}

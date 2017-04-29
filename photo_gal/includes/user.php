@@ -44,9 +44,9 @@ class User extends DatabaseObject {
 	}
 
 	function hash_pword($pword) {
-		$pword = trim($pword);
+		// $pword = trim($pword);  // let caller do the trim ????
 		$hashedPword = password_hash($pword, PASSWORD_BCRYPT, ['cost' => 10]);
-		// ???*** $hashedPword = substr($pword, 0, 60);
+		// ???*** $hashedPword = substr($pword, 0, 60);  // DEBUG trying to figure out why verify_p doesnt work
 		return $hashedPword;
 	}
 	
