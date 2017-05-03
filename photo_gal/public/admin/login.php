@@ -22,24 +22,6 @@
 		$res_ary = User::find_by_sql($sql);
 		$found_user = !empty($res_ary) ? array_shift($res_ary) : false;
 		
-		$hashDBpw = $found_user->hashpw;
-		$hashDBpwResult = password_verify($password, $hashDBpw) ? "verified plain hashpw" : "failed to verify PLAIN hashpw";
-		echo $hashDBpwResult  . "<br>";
-		$hashDBpw60 = substr($hashDBpw, 0, 60);  // ????**** put this in user::hash_pw ???
-		$hashDBpw60Result = password_verify($password, $hashDBpw60) ? "verified hashpw60" : "failed to verify hashpw60";
-		echo "Entered password: " . $password . "<br>";
-		echo "DB password: " . $found_user->password . "<br>";
-		echo "hashed DB password: " . $found_user->hashpw . "<br>";
-		echo "hashDBpw60: " . $hashDBpw60 . "<br>"; 
-		echo $hashDBpw60Result  . "<br>";
-		$newpwhash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
-		echo "hash of new pw: " . $newpwhash . "<br>";
-		$newhashpwResult = password_verify($password, $newpwhash) ? "verified NEWhashpw" : "failed to verify NEWhashpw";
-		echo $newhashpwResult . "<br>";
-		$session->login($found_user); // login no matter what for DEBUG******HIGH SECURITY RISK *****DEBUG********
-		/* END DEBUG substitute code -- REMOVE  above after use*****^^^^^
-		 */
-	/* DEBUG -- ****SAVE THIS CODE AFTER TESTING ABOVE ************
 		if ($found_user) {
 			$session->login($found_user);
 			Logger::log_action("Login", "{$username} logged in.");
@@ -49,7 +31,6 @@
 			Logger::log_action("FailLgn", "{$username} failed login attempt.");
 			$message = "Username/password combination incorrect.";
 		}
-	END DEBUG *****SAVE THIS CODE  PUT BACK IN AFTER USING TEST CODE ABOVE THIS SECTION ***********/
 	} else { // Form has not been submitted.
 		$username = "";
 		$password = "";

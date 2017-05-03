@@ -12,7 +12,7 @@ if(isset($_POST['submit'])) {  // form was submitted
 	$last_name = htmlentities(trim($_POST['last_name']));
 	
 	$formChk = new Formcheck();
-	// ** DEBUG current test (of uname via formcheck
+	// ** DEBUG current test (of uname via formcheck)
 	$minUnameLgth = 5;
 	$bUName = "length, spaces or other unusable chars in username ({$minUnameLgth} character minimum)";
 	if ($formChk->ok_tfld(trim($_POST['username']), $minUnameLgth)){
@@ -41,63 +41,8 @@ if(isset($_POST['submit'])) {  // form was submitted
 		$user->username = $formChk->form_vals['username'];
 		$user->first_name = $formChk->form_vals['first_name'];
 		$user->last_name = $formChk->form_vals['last_name'];
-		$user->password = $formChk->form_vals['password'];
-		$user->hashpw = substr(trim($user->hash_pword($formChk->form_vals[$password])), 0, 60);  // 4/28 DEBUG/TEST substr( trim($pword);, 0, 60);
+		$user->password = $formChk->form_vals['password'];	
 		
-		echo "full name of user: " . $user->fullNam() . "; pw: " . $user->password . " <br/>hashed pw: " . $user->hashpw;
-		
-		
-		// *** DEBUG EXPERIMENTAL VER USER->SAVE to test hashpw
-		global $db;
-		
-		$aryFldKeys = array('username', 'password', 'hashpw', 'first_name', 'last_name');
-		
-		$strFlds = implode(", ", $aryFldKeys);  // implode() = join() //'username', 'password', 'first...
-		$aryParams = $aryFldKeys;
-		foreach ($aryParams as &$value) {
-			$value = ':'.$value;
-		}
-		unset($value);
-		$strParams = implode(", ", $aryParams);
-		
-		// INSERT INTO table (key, key) VALUES ('value', 'value') use PDO
-		$sql = "INSERT INTO users (";
-		$sql .= $strFlds; //'username', 'password', 'first...
-		$sql .= ") VALUES (";
-		$sql .= $strParams . ")"; // ":username, :password, :first..." . ")"; // NOTE: no 's
-		
-		$fld_param_val = array(':username' => $user->username, 'password' => $user->password, 'hashpw' => $user->hashpw,
-		'first_name' => $user->first_name, 'last_name' => $user->last_name);
-		
-		$sth = $db->exec_qry($sql, $fld_param_val);  // statement handler
-		
-		if ($sth) {
-			$user->id = $db->pdo->lastInsertId();
-			return true;
-		} else {
-			return false;
-		} 	
-		
-		// *** DEBUG 4/28/17 (Con't) Select where id =  $user->id
-		// ????is the hash going into the db in a way that password_verify works?????????????
-		// ***		does $qryUser->hashpw === $user->
-		/*
-		$userCpy = User::find_by_id($user->id);
-		$userCpyVerified = password_verify($userCpy->password, substr(trim($user->hashpw), 0, 60))
-		
-		
-		??? $newpwhash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
-		??? echo "hash of new pw: " . $newpwhash . "<br>";
-		??? $newhashpwResult = password_verify($password, $newpwhash) ? "verified NEWhashpw" : "failed to verify NEWhashpw";
-		 
-		 */
-		
-		
-		
-		// ***** END DEBUG USER->SAVE experiment
-		
-		
-		/*
 		if ($user->save()) {
 			// Success
 			redirect_to('list_users.php');
@@ -106,7 +51,6 @@ if(isset($_POST['submit'])) {  // form was submitted
 			$formChk->errors['user'] = "unable to create User - may not be unique " . $DEBUGSaveVal;
 			echo $formChk->form_errors();
 		}
-		*/
 	}		
 } else { // Form has not been submitted.
 	$username = "";

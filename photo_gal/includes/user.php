@@ -11,6 +11,8 @@ class User extends DatabaseObject {
 	public $first_name;
 	public $last_name;
 	
+	private $salt_length = 22;  // *** 5/17 only use until I can figure how to get password_hash to work
+	
 	public static function authenticate($username="", $password="") {
 		global $db;
 		// Skoglund uses escape_val(), but don't need to with DBO->exec
@@ -28,7 +30,8 @@ class User extends DatabaseObject {
 		$res_ary = self::find_by_sql($sql);
 		$user = !empty($res_ary) ? array_shift($res_ary) : false;
 		if ($user) {
-			if ((!password_verify($password, $user->hashpw))){ // old non-encrypted password (!($user->password === $password)) && 
+			// $user->password, substr(trim($userCpy->hashpw), 0, 60)
+			if (!password_verify(trim($password), trim($user->hashpw))){ // old non-encrypted password (!($user->password === $password)) && 
 				$user = false;
 			}
 		}
@@ -43,12 +46,19 @@ class User extends DatabaseObject {
 		}
 	}
 
-	function hash_pword($pword) {
+	public function hash_pword($pword) {
 		// $pword = trim($pword);  // let caller do the trim ????
 		$hashedPword = password_hash($pword, PASSWORD_BCRYPT, ['cost' => 10]);
 		// ???*** $hashedPword = substr($pword, 0, 60);  // DEBUG trying to figure out why verify_p doesnt work
 		return $hashedPword;
 	}
+	
+
+	/* **********************************************************************
+	 * OLD VERSION OF PASSWORD HASH AND ENCRYPTION are in "PHP MySQL Essent/Intro"
+	 *  I mention this SINCE I COULD NOT GET hash_pword() to work until I made it public -- weird quirk
+	 */ 
+	
 	
 	public function uniqueUser(){
 		$sql_to_prep = "SELECT * FROM ".static::$tbName . " WHERE username=:username LIMIT 1";
