@@ -39,11 +39,12 @@ class User extends DatabaseObject {
 	}
 	
 	public function fullNam(){
+		$name = "";
 		if(isset($this->first_name) && isset($this->last_name)){
-			return $this->first_name . " " . $this->last_name;
-		} else {
-			return "";
-		}
+			$name = $this->first_name . " " . $this->last_name;
+		} 
+		
+		return $name;
 	}
 
 	public function hash_pword($pword) {
@@ -70,12 +71,11 @@ class User extends DatabaseObject {
 	
 	public function create($aryFlds = "") {
 		// ** for DEBUG could set $aryFlds[':username'] == "?whatever"
-		if ($this->uniqueUser()) {
+		if (!$this->uniqueUser()) {
 			return parent::create(); // assume 'aryFlds' will auto-gather attributes
-		} else {
-			// username is not unique -- need to flag this
-			return false;
 		}
+		// username is not unique -- need to flag this
+		return false;
 	}
 	
 	/* old function version of "authenticate" above
